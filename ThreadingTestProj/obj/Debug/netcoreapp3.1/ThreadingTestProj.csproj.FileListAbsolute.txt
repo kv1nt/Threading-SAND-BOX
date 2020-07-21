@@ -1,0 +1,11 @@
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.exe
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.deps.json
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.runtimeconfig.json
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.runtimeconfig.dev.json
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.dll
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\bin\Debug\netcoreapp3.1\ThreadingTestProj.pdb
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\obj\Debug\netcoreapp3.1\ThreadingTestProj.csprojAssemblyReference.cache
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\obj\Debug\netcoreapp3.1\ThreadingTestProj.AssemblyInfoInputs.cache
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\obj\Debug\netcoreapp3.1\ThreadingTestProj.AssemblyInfo.cs
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\obj\Debug\netcoreapp3.1\ThreadingTestProj.dll
+C:\Users\vipalamarchuk\source\repos\ThreadingTestProj\ThreadingTestProj\obj\Debug\netcoreapp3.1\ThreadingTestProj.pdb
