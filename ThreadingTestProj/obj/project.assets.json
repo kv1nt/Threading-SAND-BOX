@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\vipalamarchuk\\source\\repos\\ThreadingTestProj\\ThreadingTestProj\\ThreadingTestProj.csproj",
+      "projectUniqueName": "C:\\Users\\vipalamarchuk\\Desktop\\Threading\\Threading-SAND-BOX\\ThreadingTestProj\\ThreadingTestProj.csproj",
       "projectName": "ThreadingTestProj",
-      "projectPath": "C:\\Users\\vipalamarchuk\\source\\repos\\ThreadingTestProj\\ThreadingTestProj\\ThreadingTestProj.csproj",
+      "projectPath": "C:\\Users\\vipalamarchuk\\Desktop\\Threading\\Threading-SAND-BOX\\ThreadingTestProj\\ThreadingTestProj.csproj",
       "packagesPath": "C:\\Users\\vipalamarchuk\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\vipalamarchuk\\source\\repos\\ThreadingTestProj\\ThreadingTestProj\\obj\\",
+      "outputPath": "C:\\Users\\vipalamarchuk\\Desktop\\Threading\\Threading-SAND-BOX\\ThreadingTestProj\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"

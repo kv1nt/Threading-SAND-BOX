@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -8,68 +9,54 @@ namespace ThreadingTestProj
 {
     class Program
     {
-        
+
 
         static void Main(string[] args)
         {
-            Console.WriteLine("Start Main Thread");
+            var obj = new LockDiplay();
+            Thread thread1 = new Thread(obj.FileReader);
+            Thread thread3 = new Thread(obj.FileWriter);
+            Thread thread2 = new Thread(obj.FileReader);
 
-            //new Thread(
-            //    () => Que_Helper.FillToQueueValues()
-            //    ).Start();
-
-            Thread thread1 = new Thread(Que_Helper.FillToQueueValues);
-            Thread thread2 = new Thread(Que_Helper.AddFromEnotherThread);
             thread1.Start();
-            Thread.Sleep(1000);
+            thread3.Start();
             thread2.Start();
-         
 
-            Que_Helper.PrintQueue(); 
-
-
-            Console.WriteLine("End Main Thread - EXIT");
+            Console.ReadKey();
         }
 
-       
     }
 
-    public static class Que_Helper
+    public class LockDiplay
     {
-        public static List<object> GlobalQueue { get; private set; }
-
-        static Que_Helper()
+        
+        static object obj = new object();
+        public void DisplayNum()
         {
-            GlobalQueue = new List<object>();
-        }
-
-        public static void PrintQueue()
-        {
-            foreach (var item in GlobalQueue)
+            lock (this)
             {
-                Console.WriteLine(item);
+                for (int i = 1; i < 11; i++)
+                {
+                    Thread.Sleep(200);
+                    Console.WriteLine($"i = {i}");
+                }
             }
+
+            Console.WriteLine("--------------------------------");
         }
 
-        public static void FillToQueueValues()
+        public void FileReader()
         {
-           
-                for (int i = 0; i < 10; i++)
-                {
-                    Thread.Sleep(200);
-                    GlobalQueue.Add(1);
-                }
-            
+            string text = File.ReadAllText(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt");
+            Console.WriteLine(text);
         }
 
-        public static void AddFromEnotherThread()
+        public void FileWriter()
         {
-           
-                for (int i = 0; i < 3; i++)
-                {
-                    Thread.Sleep(200);
-                    GlobalQueue.Add(222);
-                }
+            using (StreamWriter sw = new StreamWriter(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt"))
+            {
+                sw.WriteLine("Vitalii");
+            }
             
         }
     }
