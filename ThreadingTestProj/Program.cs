@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -9,55 +10,77 @@ namespace ThreadingTestProj
 {
     class Program
     {
+        static object locker = new object();
+        static string[] Names = new string[10];
+        
+        const string path = @"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt";
 
-
-        static void Main(string[] args)
+        static unsafe void Main(string[] args)
         {
-            var obj = new LockDiplay();
-            Thread thread1 = new Thread(obj.FileReader);
-            Thread thread3 = new Thread(obj.FileWriter);
-            Thread thread2 = new Thread(obj.FileReader);
+            Console.WriteLine("Do work main...Started");
+            new Thread(() => FileWriter("Hello world1")).Start();
+            new Thread(() => FileWriter("Hello world2")).Start();
+            var th = new Thread(() => FileReader());
+            th.Start();
+            th.Join();
+            //Task.Run(() =>  FileWriter("Hello world1"));
+            //Task.Run(() => FileWriter("Hello world2"));
+            //Task.Run(FileReader);
 
-            thread1.Start();
-            thread3.Start();
-            thread2.Start();
+            Console.WriteLine("Do work main...Ended");
 
             Console.ReadKey();
         }
 
-    }
+        static ReaderWriterLockSlim lockSlim1 = new ReaderWriterLockSlim();
 
-    public class LockDiplay
-    {
-        
-        static object obj = new object();
-        public void DisplayNum()
+        static ReaderWriterLockSlim lockSlim2 = new ReaderWriterLockSlim();
+
+        public static void FileReader()
         {
-            lock (this)
+            byte[] buff = new byte[1024];
+            UTF8Encoding temp = new UTF8Encoding(true);
+            lockSlim2.EnterWriteLock();
+            try
             {
-                for (int i = 1; i < 11; i++)
+                using (var stream =  File.OpenRead(path))
                 {
-                    Thread.Sleep(200);
-                    Console.WriteLine($"i = {i}");
+                    if (stream.Read(buff,0,buff.Length) > 0)
+                    {
+                        Console.WriteLine(temp.GetString(buff));
+                    }
+                    
                 }
             }
-
-            Console.WriteLine("--------------------------------");
-        }
-
-        public void FileReader()
-        {
-            string text = File.ReadAllText(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt");
-            Console.WriteLine(text);
-        }
-
-        public void FileWriter()
-        {
-            using (StreamWriter sw = new StreamWriter(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt"))
+            finally
             {
-                sw.WriteLine("Vitalii");
+
+                lockSlim2.ExitWriteLock();
+            }
+        }
+        
+        public static void FileWriter(string str)
+        {
+            lockSlim2.EnterWriteLock();
+
+            try
+            {
+                byte[] data = Encoding.UTF8.GetBytes(str);
+
+                using (var stream = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
+                {
+                    stream.Write(data);
+                }
+
+            }
+            finally
+            {
+                lockSlim2.ExitWriteLock();
             }
             
         }
+
     }
+
+    
 }
