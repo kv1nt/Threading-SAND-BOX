@@ -5,82 +5,41 @@ using System.IO;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ThreadingTestProj.DeadLocks;
+using ThreadingTestProj.Threading;
 
 namespace ThreadingTestProj
 {
     class Program
     {
-        static object locker = new object();
-        static string[] Names = new string[10];
-        
-        const string path = @"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt";
-
+        private static readonly System.Timers.Timer aTimer = new System.Timers.Timer(1000);
         static unsafe void Main(string[] args)
         {
             Console.WriteLine("Do work main...Started");
-            new Thread(() => FileWriter("Hello world1")).Start();
-            new Thread(() => FileWriter("Hello world2")).Start();
-            var th = new Thread(() => FileReader());
-            th.Start();
-            th.Join();
-            //Task.Run(() =>  FileWriter("Hello world1"));
-            //Task.Run(() => FileWriter("Hello world2"));
-            //Task.Run(FileReader);
+
+            DeadLockCodeSemple deadLockCodeSemple = new DeadLockCodeSemple();
+            DeadLockCodeSemple.SetTimer(aTimer);
+            deadLockCodeSemple.Foo();
+            aTimer.Stop();
+            aTimer.Dispose();
+            aTimer.Close();
+            //ThreadCodeSemple ts = new ThreadCodeSemple();
+            //Thread.Sleep(100);
+            //Task.Run(() => ts.PrintWord("Thread 1!!!", 500));
+            //Task.Run(() => ts.PrintNumber(7, 1000));
+
+            //var dayOfWeek = Task.Run(() => DateTime.Today.DayOfWeek );
+            //dayOfWeek.ContinueWith(x => Console.WriteLine(x.Result));
+
+
+            //Task.Run(() => ts.PrintWord("Thread      3!!!", 1000));
 
             Console.WriteLine("Do work main...Ended");
 
             Console.ReadKey();
         }
 
-        static ReaderWriterLockSlim lockSlim1 = new ReaderWriterLockSlim();
-
-        static ReaderWriterLockSlim lockSlim2 = new ReaderWriterLockSlim();
-
-        public static void FileReader()
-        {
-            byte[] buff = new byte[1024];
-            UTF8Encoding temp = new UTF8Encoding(true);
-            lockSlim2.EnterWriteLock();
-            try
-            {
-                using (var stream =  File.OpenRead(path))
-                {
-                    if (stream.Read(buff,0,buff.Length) > 0)
-                    {
-                        Console.WriteLine(temp.GetString(buff));
-                    }
-                    
-                }
-            }
-            finally
-            {
-
-                lockSlim2.ExitWriteLock();
-            }
-        }
-        
-        public static void FileWriter(string str)
-        {
-            lockSlim2.EnterWriteLock();
-
-            try
-            {
-                byte[] data = Encoding.UTF8.GetBytes(str);
-
-                using (var stream = File.Open(path, FileMode.Open, FileAccess.ReadWrite, FileShare.ReadWrite))
-                {
-                    stream.Write(data);
-                }
-
-            }
-            finally
-            {
-                lockSlim2.ExitWriteLock();
-            }
-            
-        }
 
     }
-
     
 }
