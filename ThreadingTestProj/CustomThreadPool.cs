@@ -10,6 +10,7 @@ namespace ThreadingTestProj
         //https://www.youtube.com/watch?v=OxME9xdvugY
         private readonly Thread[] _threads;
         private readonly Queue<Action> _actions;
+        private readonly object _syncRoot;
 
         public CustomThreadPool(int maxThreads = 4)
         {
@@ -20,26 +21,56 @@ namespace ThreadingTestProj
                 {
                     IsBackground = true,
                     Name = $"Custom thread poll Threads {i}"
-
                 };
+                _threads[i].Start();
             }
 
-            _actions = new Queue<Action>(); 
+            _actions = new Queue<Action>();
+            _syncRoot = new object();
         }
         public void Queue(Action action)
         {
-            _actions.Enqueue(action);
+            Monitor.Enter(_syncRoot);
+            try
+            {
+                _actions.Enqueue(action);
+                if(_actions.Count == 1)
+                {
+                    Monitor.Pulse(_syncRoot);
+                }
+            }
+            finally
+            {
+                Monitor.Exit(_syncRoot);
+            }
         }
 
         private  void ThreadProc()
         {
+            
             while (true)
             {
-                if(_actions.Count > 0)
+                Action action;
+                Monitor.Enter(_syncRoot);
+                try
                 {
-                    var action = _actions.Dequeue();
-                    action();
+                    if (_actions.Count > 0)
+                    {
+                        action = _actions.Dequeue();
+
+                    }
+                    else
+                    {
+                        Monitor.Wait(_syncRoot);
+                        continue;
+                    }
                 }
+                finally
+                {
+                    Monitor.Exit(_syncRoot);
+                }
+
+                action();
             }
         } 
     }

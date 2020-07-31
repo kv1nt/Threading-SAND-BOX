@@ -14,16 +14,20 @@ namespace ThreadingTestProj
     {
         static unsafe void Main(string[] args)
         {
+            var pool = new CustomThreadPool();
+            pool.Queue(() => Console.WriteLine("From my custom thread pool"));
+            pool.Queue(() => Console.WriteLine("From my custom thread pool2"));
+            pool.Queue(() => Console.WriteLine("From my custom thread pool3"));
 
-            var thread = new Thread(ThreadProc) 
-            { 
-                Name = "My custom Thread",
-                Priority = ThreadPriority.Normal,
-                IsBackground = true
-            };
-            thread.Start();
+            //var thread = new Thread(ThreadProc) 
+            //{ 
+            //    Name = "My custom Thread",
+            //    Priority = ThreadPriority.Normal,
+            //    IsBackground = true
+            //};
+            //thread.Start();
 
-            ThreadPool.QueueUserWorkItem(s => Console.WriteLine("Hello from pool"));
+            //ThreadPool.QueueUserWorkItem(s => Console.WriteLine("Hello from pool"));
 
             //Console.WriteLine("Do work main...Started");
 
