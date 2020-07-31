@@ -12,17 +12,27 @@ namespace ThreadingTestProj
 {
     class Program
     {
-        private static readonly System.Timers.Timer aTimer = new System.Timers.Timer(1000);
         static unsafe void Main(string[] args)
         {
-            Console.WriteLine("Do work main...Started");
 
-            DeadLockCodeSemple deadLockCodeSemple = new DeadLockCodeSemple();
-            DeadLockCodeSemple.SetTimer(aTimer);
-            deadLockCodeSemple.Foo();
-            aTimer.Stop();
-            aTimer.Dispose();
-            aTimer.Close();
+            var thread = new Thread(ThreadProc) 
+            { 
+                Name = "My custom Thread",
+                Priority = ThreadPriority.Normal,
+                IsBackground = true
+            };
+            thread.Start();
+
+            ThreadPool.QueueUserWorkItem(s => Console.WriteLine("Hello from pool"));
+
+            //Console.WriteLine("Do work main...Started");
+
+            //DeadLockCodeSemple deadLockCodeSemple = new DeadLockCodeSemple();
+            //DeadLockCodeSemple.SetTimer(aTimer);
+            //deadLockCodeSemple.Foo();
+            //aTimer.Stop();
+            //aTimer.Dispose();
+            //aTimer.Close();
             //ThreadCodeSemple ts = new ThreadCodeSemple();
             //Thread.Sleep(100);
             //Task.Run(() => ts.PrintWord("Thread 1!!!", 500));
@@ -34,12 +44,17 @@ namespace ThreadingTestProj
 
             //Task.Run(() => ts.PrintWord("Thread      3!!!", 1000));
 
-            Console.WriteLine("Do work main...Ended");
+            //Console.WriteLine("Do work main...Ended");
 
             Console.ReadKey();
         }
 
-
+        public static void ThreadProc()
+        {
+            Console.WriteLine("Thread started...");
+            
+            //System.Diagnostics.Debugger.Break();
+        }
     }
     
 }
