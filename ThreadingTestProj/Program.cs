@@ -2,62 +2,63 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using ThreadingTestProj.DeadLocks;
+using ThreadingTestProj.Threading;
 
 namespace ThreadingTestProj
 {
     class Program
     {
-
-
-        static void Main(string[] args)
+        static unsafe void Main(string[] args)
         {
-            var obj = new LockDiplay();
-            Thread thread1 = new Thread(obj.FileReader);
-            Thread thread3 = new Thread(obj.FileWriter);
-            Thread thread2 = new Thread(obj.FileReader);
+            var pool = new CustomThreadPool();
+            pool.Queue(() => Console.WriteLine("From my custom thread pool"));
+            pool.Queue(() => Console.WriteLine("From my custom thread pool2"));
+            pool.Queue(() => Console.WriteLine("From my custom thread pool3"));
 
-            thread1.Start();
-            thread3.Start();
-            thread2.Start();
+            //var thread = new Thread(ThreadProc) 
+            //{ 
+            //    Name = "My custom Thread",
+            //    Priority = ThreadPriority.Normal,
+            //    IsBackground = true
+            //};
+            //thread.Start();
+
+            //ThreadPool.QueueUserWorkItem(s => Console.WriteLine("Hello from pool"));
+
+            //Console.WriteLine("Do work main...Started");
+
+            //DeadLockCodeSemple deadLockCodeSemple = new DeadLockCodeSemple();
+            //DeadLockCodeSemple.SetTimer(aTimer);
+            //deadLockCodeSemple.Foo();
+            //aTimer.Stop();
+            //aTimer.Dispose();
+            //aTimer.Close();
+            //ThreadCodeSemple ts = new ThreadCodeSemple();
+            //Thread.Sleep(100);
+            //Task.Run(() => ts.PrintWord("Thread 1!!!", 500));
+            //Task.Run(() => ts.PrintNumber(7, 1000));
+
+            //var dayOfWeek = Task.Run(() => DateTime.Today.DayOfWeek );
+            //dayOfWeek.ContinueWith(x => Console.WriteLine(x.Result));
+
+
+            //Task.Run(() => ts.PrintWord("Thread      3!!!", 1000));
+
+            //Console.WriteLine("Do work main...Ended");
 
             Console.ReadKey();
         }
 
-    }
-
-    public class LockDiplay
-    {
-        
-        static object obj = new object();
-        public void DisplayNum()
+        public static void ThreadProc()
         {
-            lock (this)
-            {
-                for (int i = 1; i < 11; i++)
-                {
-                    Thread.Sleep(200);
-                    Console.WriteLine($"i = {i}");
-                }
-            }
-
-            Console.WriteLine("--------------------------------");
-        }
-
-        public void FileReader()
-        {
-            string text = File.ReadAllText(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt");
-            Console.WriteLine(text);
-        }
-
-        public void FileWriter()
-        {
-            using (StreamWriter sw = new StreamWriter(@"C:\Users\vipalamarchuk\Desktop\Threading\Threading-SAND-BOX\ThreadingTestProj\test.txt"))
-            {
-                sw.WriteLine("Vitalii");
-            }
+            Console.WriteLine("Thread started...");
             
+            //System.Diagnostics.Debugger.Break();
         }
     }
+    
 }
